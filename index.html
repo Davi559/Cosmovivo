@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CosmosVivo - Explorando o Universo</title>
+  <style>
+    :root {
+      --cor-principal: #00faff;
+      --bg-claro: #f0f0f0;
+      --bg-escuro: #000022;
+      --texto-claro: #000;
+      --texto-escuro: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--texto-escuro);
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    #fundoEstrelado {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    header {
+      background-color: #0a0a23;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 10px var(--cor-principal);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+      color: var(--cor-principal);
+    }
+
+    nav {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    nav a {
+      margin: 0 10px;
+      color: #ccc;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+
+    nav a:hover {
+      color: var(--cor-principal);
+    }
+
+    section {
+      padding: 30px 15px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 {
+      color: var(--cor-principal);
+      border-bottom: 1px solid var(--cor-principal);
+      padding-bottom: 10px;
+      font-size: 1.4em;
+      margin-bottom: 20px;
+    }
+
+    .quiz {
+      background: black;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      border-radius: 10px;
+      margin: auto;
+      max-width: 100%;
+    }
+
+    .quiz button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      background: var(--cor-principal);
+      color: black;
+    }
+
+    #solarCanvas {
+      width: 80%;
+      max-width: 480px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border: 2px solid var(--cor-principal);
+      border-radius: 10px;
+      background: black;
+    }
+
+    #tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    #tabs button {
+      flex: 1 1 auto;
+      min-width: 100px;
+      padding: 8px;
+      font-weight: bold;
+      background: #444;
+      color: white;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    #tabs button.active {
+      background: var(--cor-principal);
+      color: black;
+    }
+
+    #imagensBiblioteca {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    #imagensBiblioteca img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--cor-principal);
+      transition: transform 0.3s;
+    }
+
+    #imagensBiblioteca img:hover {
+      transform: scale(1.05);
+    }
+
+    #luaCanvas {
+      width: 200px;
+      height: 200px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #modalImagem {
+      display: none;
+      position: fixed;
+      z-index: 1500;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    #modalImagem img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 15px;
+      box-shadow: 0 0 20px var(--cor-principal);
+      transition: transform 0.3s;
+    }
+
+    #modalImagem:hover img {
+      transform: scale(1.05);
+    }
+
+    footer {
+      position: relative;
+      z-index: 10;
+      background: transparent;
+      color: white;
+      text-align: center;
+      padding: 15px 10px 30px 10px;
+      font-family: Arial, sans-serif;
+      user-select: none;
+    }
+
+    footer p {
+      margin: 0 0 10px 0;
+      font-size: 1em;
+    }
+
+    footer a {
+      color: pink;
+      text-decoration: none;
+      font-size: 2em;
+      display: inline-block;
+    }
+
+    footer a:hover {
+      color: #ff69b4;
+    }
+
+    /* Responsividade */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.5em;
+      }
+
+      nav a {
+        margin: 0 5px;
+        font-size: 0.8em;
+      }
+
+      #imagensBiblioteca {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+
+      #solarCanvas {
+        width: 95%;
+        max-width: none;
+      }
+
+      #luaCanvas {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="fundoEstrelado"></canvas>
+
+  <header>
+    <h1>CosmosVivo</h1>
+    <nav>
+      <a href="#biblioteca">Biblioteca de Imagens</a>
+      <a href="#quiz">Quiz</a>
+      <a href="#simulador">Simulador</a>
+      <a href="#faseDaLua">Fase da Lua</a>
+      <a href="#noticias">Notícias</a>
+    </nav>
+  </header>
+
+  <section id="biblioteca" data-aos="fade-up">
+    <h2>Biblioteca de Imagens Espaciais</h2>
+    <div id="tabs">
+      <button data-categoria="galaxias" class="active">Galáxias</button>
+      <button data-categoria="nebulosas">Nebulosas</button>
+      <button data-categoria="planetas">Planetas</button>
+    </div>
+    <div id="imagensBiblioteca"></div>
+
+    <div id="modalImagem">
+      <img id="modalImg" src="" alt="Imagem Ampliada" />
+    </div>
+  </section>
+
+  <section id="quiz" data-aos="fade-up">
+    <h2>Quiz de Astronomia</h2>
+    <div class="quiz">
+      <p id="perguntaQuiz"></p>
+      <div id="opcoesQuiz"></div>
+      <button id="btnProximaPergunta" style="margin-top: 15px; display:none;">Próxima Pergunta</button>
+      <div class="quiz-result" id="resultado-quiz"></div>
+    </div>
+  </section>
+
+  <section id="simulador" data-aos="fade-up">
+    <h2>🪐 Simulador do Sistema Solar</h2>
+    <canvas id="solarCanvas" width="600" height="600"></canvas>
+  </section>
+
+  <section id="faseDaLua" data-aos="fade-up">
+    <h2>🌙 Fase Atual da Lua</h2>
+    <canvas id="luaCanvas" width="200" height="200"></canvas>
+    <p id="nomeFase"></p>
+    <p id="descricaoFase"></p>
+    <p id="dataHoje"></p>
+  </section>
+
+  <section id="noticias" data-aos="fade-up" style="max-width: 700px; margin: 40px auto;">
+    <h2>Notícias de Astronomia</h2>
+    <input id="inputBuscaNoticias" type="text" placeholder="Buscar notícias..."
+      style="width:100%; padding:10px; font-size:1em; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 15px;" />
+    <button onclick="buscarNoticiasRSS()"
+      style="background: var(--cor-principal); border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold; color:#000;">Buscar</button>
+    <div id="noticias-container" style="margin-top: 20px; color: white;"></div>
+  </section>
+
+  <footer>
+    <p>© 2025 CosmosVivo - Feito para Alice 💗</p>
+    <a href="https://github.com/Davi559" target="_blank" aria-label="GitHub">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="pink" viewBox="0 0 24 24">
+        <path d="M12 .296c-6.63 0-12 5.373-12 12 0 5.303 
+    3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 
+    0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.09-.745.084-.729.084-.729 
+    1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.809 
+    1.305 3.495.998.108-.775.418-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.931 
+    0-1.31.465-2.381 1.235-3.221-.135-.303-.54-1.523.105-3.176 
+    0 0 1.005-.322 3.3 1.23a11.5 11.5 0 0 1 3-.405c1.02.005 
+    2.045.138 3 .405 2.28-1.552 3.285-1.23 
+    3.285-1.23.645 1.653.24 2.873.12 
+    3.176.765.84 1.23 1.911 1.23 3.221 
+    0 4.61-2.805 5.625-5.475 5.921.435.375.81 1.102.81 2.222 
+    0 1.606-.015 2.896-.015 3.286 
+    0 .315.21.69.825.573C20.565 22.09 
+    24 17.592 24 12.296c0-6.627-5.373-12-12-12" />
+      </svg>
+    </a>
+
+  </footer>
+
+  <script>
+    const botoesTabs = document.querySelectorAll("#tabs button");
+    const containerImagens = document.getElementById("imagensBiblioteca");
+    const modal = document.getElementById("modalImagem");
+    const modalImg = document.getElementById("modalImg");
+
+    const imagens = {
+      galaxias: [
+        { url: "https://cdn.esahubble.org/archives/images/screen/opo0501a.jpg", titulo: "Galáxia NGC 1300" },
+        { url: "https://wallpapers.com/images/high/milky-way-background-ymz3cbihm16xyqam.webp", titulo: "Via Láctea" },
+        { url: "https://cdn.pixabay.com/photo/2011/12/13/14/31/ngc-4414-11016_960_720.jpg", titulo: "Galáxia NGC 4414" }
+      ],
+      nebulosas: [
+        { url: "https://s2.glbimg.com/qZpL8IoyinvzgwO2O1kbIwbLuyU=/e.glbimg.com/og/ed/f/original/2016/07/12/orion-nebula.jpg", titulo: "Nebulosa de Órion" },
+        { url: "https://tm.ibxk.com.br//2021/04/05/05214246275380.jpg?ims=1280x605", titulo: "Nebulosa do Véu" },
+        { url: "https://hypescience.com/wp-content/uploads/2010/04/nebulosa-carina.jpg", titulo: "Nebulosa da Carina" }
+      ],
+      planetas: [
+        { url: "https://wallpapers.com/images/featured-full/jupiter-f9nabtuotuulifex.jpg", titulo: "Júpiter" },
+        { url: "https://wallpapers.com/images/hd/planet-earth-4k-space-hd-qis7o51sock2fwsr.webp", titulo: "Terra" },
+        { url: "https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg", titulo: "Marte" }
+      ]
+    };
+
+    function carregarCategoria(categoria) {
+      containerImagens.style.opacity = 0;
+      setTimeout(() => {
+        containerImagens.innerHTML = "";
+        imagens[categoria].forEach(img => {
+          const div = document.createElement("div");
+          div.style.textAlign = "center";
+
+          const imagemElem = document.createElement("img");
+          imagemElem.src = img.url;
+          imagemElem.alt = img.titulo;
+          imagemElem.title = "Clique para ampliar";
+          imagemElem.style.borderRadius = "10px";
+          imagemElem.style.boxShadow = "0 0 10px var(--cor-principal)";
+          imagemElem.style.transition = "transform 0.3s";
+          imagemElem.style.cursor = "pointer";
+
+          imagemElem.onmouseover = () => imagemElem.style.transform = "scale(1.05)";
+          imagemElem.onmouseout = () => imagemElem.style.transform = "scale(1)";
+
+          div.appendChild(imagemElem);
+          containerImagens.appendChild(div);
+
+          imagemElem.onclick = () => {
+            modalImg.src = img.url;
+            modal.style.display = "flex";
+          };
+        });
+        containerImagens.style.opacity = 1;
+      }, 300);
+    }
+
+    botoesTabs.forEach(botao => {
+      botao.addEventListener("click", () => {
+        botoesTabs.forEach(b => {
+          b.classList.remove("active");
+          b.style.background = "#444";
+          b.style.color = "#eee";
+        });
+        botao.classList.add("active");
+        botao.style.background = "var(--cor-principal)";
+        botao.style.color = "#000";
+
+        const categoria = botao.getAttribute("data-categoria");
+        carregarCategoria(categoria);
+      });
+    });
+
+    modal.onclick = () => {
+      modal.style.display = "none";
+      modalImg.src = "";
+    };
+
+    carregarCategoria("galaxias");
+
+    const perguntasQuiz = [
+      {
+        pergunta: "Qual planeta tem o maior número de luas conhecidas?",
+        opcoes: [
+          { texto: "Terra", correta: false },
+          { texto: "Marte", correta: false },
+          { texto: "Saturno", correta: true },
+          { texto: "Júpiter", correta: false }
+        ]
+      },
+      {
+        pergunta: "Qual é a estrela mais próxima da Terra?",
+        opcoes: [
+          { texto: "O Sol", correta: true },
+          { texto: "Alpha Centauri", correta: false },
+          { texto: "Sirius", correta: false },
+          { texto: "Vega", correta: false }
+        ]
+      },
+      {
+        pergunta: "Qual planeta é conhecido como o planeta vermelho?",
+        opcoes: [
+          { texto: "Mercúrio", correta: false },
+          { texto: "Marte", correta: true },
+          { texto: "Vênus", correta: false },
+          { texto: "Júpiter", correta: false }
+        ]
+      }
+    ];
+
+    let indicePerguntaAtual = 0;
+    let pontuacao = 0;
+
+    const perguntaEl = document.getElementById("perguntaQuiz");
+    const opcoesEl = document.getElementById("opcoesQuiz");
+    const btnProxima = document.getElementById("btnProximaPergunta");
+    const resultadoQuiz = document.getElementById("resultado-quiz");
+
+    function mostrarPergunta() {
+      resultadoQuiz.textContent = "";
+      btnProxima.style.display = "none";
+      opcoesEl.innerHTML = "";
+      const perguntaAtual = perguntasQuiz[indicePerguntaAtual];
+      perguntaEl.textContent = perguntaAtual.pergunta;
+
+      perguntaAtual.opcoes.forEach((opcao, i) => {
+        const botao = document.createElement("button");
+        botao.textContent = opcao.texto;
+        botao.onclick = () => selecionarResposta(i);
+        opcoesEl.appendChild(botao);
+      });
+    }
+
+    function selecionarResposta(i) {
+      const perguntaAtual = perguntasQuiz[indicePerguntaAtual];
+      const correta = perguntaAtual.opcoes[i].correta;
+      if (correta) {
+        pontuacao++;
+      }
+      Array.from(opcoesEl.children).forEach(btn => btn.disabled = true);
+      btnProxima.style.display = "block";
+      resultadoQuiz.textContent = correta ? "Correto! 🎉" : "Errado! ❌";
+    }
+
+    btnProxima.onclick = () => {
+      indicePerguntaAtual++;
+      if (indicePerguntaAtual < perguntasQuiz.length) {
+        mostrarPergunta();
+      } else {
+        perguntaEl.textContent = `Quiz finalizado! Sua pontuação: ${pontuacao} de ${perguntasQuiz.length}`;
+        opcoesEl.innerHTML = "";
+        btnProxima.style.display = "none";
+        resultadoQuiz.textContent = "";
+        indicePerguntaAtual = 0;
+        pontuacao = 0;
+      }
+    };
+
+    mostrarPergunta();
+
+    const solarCanvas = document.getElementById("solarCanvas");
+    const solarCtx = solarCanvas.getContext("2d");
+    const w = solarCanvas.width;
+    const h = solarCanvas.height;
+    const solX = w / 2;
+    const solY = h / 2;
+
+    const planetasSimulador = [
+      { nome: "Mercúrio", raio: 4, distancia: 50, angulo: 0, velocidade: 0.02, cor: "#aaaaaa" },
+      { nome: "Vênus", raio: 7, distancia: 75, angulo: 0, velocidade: 0.015, cor: "#ccbb55" },
+      { nome: "Terra", raio: 8, distancia: 100, angulo: 0, velocidade: 0.01, cor: "#22aaff" },
+      { nome: "Marte", raio: 6, distancia: 130, angulo: 0, velocidade: 0.008, cor: "#dd4422" },
+      { nome: "Júpiter", raio: 14, distancia: 180, angulo: 0, velocidade: 0.005, cor: "#ffaa22" },
+      { nome: "Saturno", raio: 12, distancia: 220, angulo: 0, velocidade: 0.004, cor: "#ffdd77" },
+      { nome: "Urano", raio: 10, distancia: 260, angulo: 0, velocidade: 0.003, cor: "#66ccff" },
+      { nome: "Netuno", raio: 10, distancia: 300, angulo: 0, velocidade: 0.002, cor: "#2255ff" }
+    ];
+
+    function desenharSol() {
+      const grad = solarCtx.createRadialGradient(solX, solY, 20, solX, solY, 60);
+      grad.addColorStop(0, "#ffff00");
+      grad.addColorStop(1, "#ffaa00");
+      solarCtx.fillStyle = grad;
+      solarCtx.beginPath();
+      solarCtx.arc(solX, solY, 40, 0, Math.PI * 2);
+      solarCtx.fill();
+      solarCtx.shadowColor = "#ffbb33";
+      solarCtx.shadowBlur = 30;
+    }
+
+    function desenharPlaneta(planeta) {
+      const x = solX + planeta.distancia * Math.cos(planeta.angulo);
+      const y = solY + planeta.distancia * Math.sin(planeta.angulo);
+
+      solarCtx.strokeStyle = "rgba(255,255,255,0.15)";
+      solarCtx.beginPath();
+      solarCtx.ellipse(solX, solY, planeta.distancia, planeta.distancia * 0.6, 0, 0, Math.PI * 2);
+      solarCtx.stroke();
+
+      solarCtx.fillStyle = planeta.cor;
+      solarCtx.shadowColor = planeta.cor;
+      solarCtx.shadowBlur = 10;
+      solarCtx.beginPath();
+      solarCtx.arc(x, y, planeta.raio, 0, Math.PI * 2);
+      solarCtx.fill();
+
+      planeta.angulo += planeta.velocidade;
+    }
+
+    function animarSistemaSolar() {
+      solarCtx.clearRect(0, 0, w, h);
+      desenharSol();
+      planetasSimulador.forEach(desenharPlaneta);
+      requestAnimationFrame(animarSistemaSolar);
+    }
+
+    animarSistemaSolar();
+
+    const luaCanvas = document.getElementById("luaCanvas");
+    const luaCtx = luaCanvas.getContext("2d");
+
+    function desenharLua(fase) {
+      luaCtx.clearRect(0, 0, luaCanvas.width, luaCanvas.height);
+      const cx = luaCanvas.width / 2;
+      const cy = luaCanvas.height / 2;
+      const r = 80;
+
+      luaCtx.fillStyle = "#ddd";
+      luaCtx.beginPath();
+      luaCtx.arc(cx, cy, r, 0, Math.PI * 2);
+      luaCtx.fill();
+
+      luaCtx.globalCompositeOperation = "destination-out";
+
+      luaCtx.fillStyle = "black";
+      let p = fase;
+      if (p < 0.5) {
+        luaCtx.beginPath();
+        luaCtx.ellipse(cx + r * 2 * p, cy, r, r, 0, 0, Math.PI * 2);
+        luaCtx.fill();
+      } else {
+        luaCtx.beginPath();
+        luaCtx.ellipse(cx - r * 2 * (p - 0.5), cy, r, r, 0, 0, Math.PI * 2);
+        luaCtx.fill();
+      }
+
+      luaCtx.globalCompositeOperation = "source-over";
+    }
+
+    function calcularFaseLua() {
+      const hoje = new Date();
+      const ano = hoje.getFullYear();
+      const mes = hoje.getMonth();
+      const dia = hoje.getDate();
+
+      const lp = 2551443;
+      const now = new Date(ano, mes, dia, 20, 35, 0);
+      const new_moon = new Date(1970, 0, 7, 20, 35, 0);
+      const phase = ((now - new_moon) / 1000) % lp / lp;
+      return phase;
+    }
+
+    function nomeFase(phase) {
+      if (phase < 0.02 || phase > 0.98) return "Lua Nova";
+      else if (phase < 0.25) return "Lua Crescente";
+      else if (phase < 0.27) return "Quarto Crescente";
+      else if (phase < 0.48) return "Lua Crescente Gibosa";
+      else if (phase < 0.52) return "Lua Cheia";
+      else if (phase < 0.75) return "Lua Minguante Gibosa";
+      else if (phase < 0.77) return "Quarto Minguante";
+      else return "Lua Minguante";
+    }
+
+    function descricaoFase(nome) {
+      switch (nome) {
+        case "Lua Nova": return "A Lua está entre a Terra e o Sol, não é visível.";
+        case "Lua Crescente": return "A Lua começa a aparecer no céu ao anoitecer.";
+        case "Quarto Crescente": return "A metade direita da Lua está iluminada.";
+        case "Lua Crescente Gibosa": return "Mais da metade da Lua está iluminada, mas ainda não cheia.";
+        case "Lua Cheia": return "A Lua está totalmente iluminada.";
+        case "Lua Minguante Gibosa": return "A Lua começa a diminuir sua iluminação.";
+        case "Quarto Minguante": return "A metade esquerda da Lua está iluminada.";
+        case "Lua Minguante": return "A Lua está diminuindo até a Lua Nova.";
+        default: return "";
+      }
+    }
+
+    function atualizarFaseLua() {
+      const phase = calcularFaseLua();
+      desenharLua(phase);
+      const nome = nomeFase(phase);
+      document.getElementById("nomeFase").textContent = nome;
+      document.getElementById("descricaoFase").textContent = descricaoFase(nome);
+      const hoje = new Date();
+      document.getElementById("dataHoje").textContent = hoje.toLocaleDateString();
+    }
+
+    atualizarFaseLua();
+
+    const fundo = document.getElementById("fundoEstrelado");
+    const ctx = fundo.getContext("2d");
+    let stars = [];
+
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < 200; i++) {
+        stars.push({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          size: Math.random() * 1.5,
+          speed: Math.random() * 0.05 + 0.01
+        });
+      }
+    }
+
+    function resizeCanvas() {
+      fundo.width = window.innerWidth;
+      fundo.height = window.innerHeight;
+      initStars();
+    }
+
+    function animarEstrelas() {
+      ctx.clearRect(0, 0, fundo.width, fundo.height);
+      ctx.fillStyle = "white";
+      stars.forEach(star => {
+        star.x -= star.speed;
+        if (star.x < 0) star.x = fundo.width;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      requestAnimationFrame(animarEstrelas);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    animarEstrelas();
+
+    function buscarNoticiasRSS() {
+      alert("Busca de notícias ainda não implementada.");
+    }
+  </script>
+</body>
+
+</html>
